@@ -14,7 +14,8 @@
 # ]
 
 
-def print_header
+def print_header(students)
+  # exit if students.count == 0
   puts "The students of my cohort at Makers Academy"
   puts "--------------"
 end
@@ -44,6 +45,7 @@ def print_cohort(students, cohort)
 end
 
 def print_footer(names)
+  # exit if names.count == 0
   puts "Overall, we have #{names.count} great students"
 end
 
@@ -82,7 +84,8 @@ def input_students
 end
 #nothing happens until we call the methods
 students = input_students
-print_header
+exit if students.count == 0
+print_header(students)
 print(students)
 print_cohort(students, :may)
 print_footer(students)
