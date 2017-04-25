@@ -22,7 +22,9 @@ end
 def print(students)
   lineWidth = 15
   students.each_with_index do |student, i|
-      puts "#{i+1}. #{student[:name]}".ljust(lineWidth) + "(#{student[:cohort]} cohort) ".center(lineWidth) + "Hobby: #{student[:hobby]}".center(lineWidth*2)
+      puts  "#{i+1}. #{student[:name]}".ljust(lineWidth) +
+            "(#{student[:cohort]} cohort) ".center(lineWidth) +
+            "Hobby: #{student[:hobby]}".center(lineWidth*2)
       end
 end
 
