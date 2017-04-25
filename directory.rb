@@ -28,6 +28,21 @@ def print(students)
       end
 end
 
+def print_cohort(students, cohort)
+  puts
+  puts "The students of #{cohort.to_s} cohort at Makers Academy"
+  puts "--------------"
+  lineWidth =15
+  k =1
+  students.each_with_index do |student, i|
+    next if student[:cohort] != cohort
+    puts  "#{k}. #{student[:name]}".ljust(lineWidth) +
+          "(#{student[:cohort]} cohort) ".center(lineWidth) +
+          "Hobby: #{student[:hobby]}".center(lineWidth*2)
+          k+=1
+  end
+end
+
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
@@ -59,7 +74,8 @@ def input_students
     cohort = checkmonth(cohort)
     # add the student hash to the array
     students << {name: name, cohort: cohort, hobby: hobby}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} students" if students.count > 1
+    puts "Now we have 1 student" if students.count == 1
   end
   #return the array of students
   students
@@ -68,4 +84,5 @@ end
 students = input_students
 print_header
 print(students)
+print_cohort(students, :may)
 print_footer(students)
