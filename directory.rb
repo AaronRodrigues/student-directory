@@ -36,7 +36,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -80,7 +80,7 @@ def checkmonth check
 months = %w(january febuary march april may june july august september october november december)
   while months.include?(check.downcase) == false
     puts "Enter student cohort"
-    check = gets.chomp
+    check = STDIN.gets.chomp
     return '2017' if check == ''
   end
   return check.to_sym
@@ -94,10 +94,10 @@ def input_students
     name =' '
     while !name.empty? do
     #get name from the user
-    name = gets.chomp
+    name = STDIN.gets.chomp
     break if name == ''
     puts "Add a student hobby"
-    hobby = gets.chomp
+    hobby = STDIN.gets.chomp
     #Get student cohort from user
     cohort = ' '
     cohort = checkmonth(cohort)
@@ -120,8 +120,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename= "students.csv") #Here we give filename a default value, if the argument is not supplied students.csv is used
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobby = line.chomp.split(' , ')
     @students << {name: name, cohort: cohort.to_sym, hobby: hobby}
@@ -129,11 +129,23 @@ def load_students
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil? #get out of the method if it isn't given
+  if File.exists?(filename) #if it exists..
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
 
 #nothing happens until we call the methods
+try_load_students
 interactive_menu
 exit if @students.count == 0
-print_header()
-print_students_list()
-print_cohort(students, :may)
-print_footer()
+# print_header()
+# print_students_list()
+# print_cohort(students, :may)
+# print_footer()
