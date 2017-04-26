@@ -113,7 +113,9 @@ def student_data_input name, cohort, hobby
 end
 
 def save_students
-  file = File.open(filename = "students.csv", "w")
+  puts "Input the filename to save as : "
+  filename = STDIN.gets.chomp
+    file = File.open(filename , "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:hobby]]
     csv_line = student_data.join(" , ")
@@ -121,14 +123,23 @@ def save_students
   end
   file.close
   puts "#{@students.count} Students saved to #{filename}"
+  puts
 end
 
 def load_students(filename= "students.csv") #Here we give filename a default value, if the argument is not supplied students.csv is used
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, hobby = line.chomp.split(' , ')
-    student_data_input name, cohort, hobby
-    end
+  puts "Input the filename to be loaded : "
+  filename = STDIN.gets.chomp
+  return if filename.nil?
+  if File.exists?(filename)
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+      name, cohort, hobby = line.chomp.split(' , ')
+      student_data_input name, cohort, hobby
+      end
+  else
+    puts "Sorry, #{filename} does not exist!"
+    exit
+  end
   file.close
   puts "#{@students.count} students loaded from #{filename}"
 end
