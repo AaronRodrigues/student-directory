@@ -102,12 +102,14 @@ def input_students
     cohort = ' '
     cohort = checkmonth(cohort)
     # add the student hash to the array
-    @students << {name: name, cohort: cohort, hobby: hobby}
+    student_data_input name, cohort, hobby
     puts "Now we have #{@students.count} students" if @students.count > 1
     puts "Now we have 1 student" if @students.count == 1
   end
-  #return the array of students
+end
 
+def student_data_input name, cohort, hobby
+  @students << {name: name, cohort: cohort, hobby: hobby}
 end
 
 def save_students
@@ -124,13 +126,13 @@ def load_students(filename= "students.csv") #Here we give filename a default val
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobby = line.chomp.split(' , ')
-    @students << {name: name, cohort: cohort.to_sym, hobby: hobby}
-  end
+    student_data_input name, cohort, hobby
+    end
   file.close
 end
 
 def try_load_students
-  filename = ARGV.first
+  filename = "students.csv" #ARGV.first# use this if filename is provided in cml
   return if filename.nil? #get out of the method if it isn't given
   if File.exists?(filename) #if it exists..
     load_students(filename)
@@ -145,7 +147,3 @@ end
 try_load_students
 interactive_menu
 exit if @students.count == 0
-# print_header()
-# print_students_list()
-# print_cohort(students, :may)
-# print_footer()
