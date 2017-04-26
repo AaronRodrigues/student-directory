@@ -1,28 +1,48 @@
-# lets put all students into an array
-# students =[
-#   {name: "Dr. Hannibal Lecter", cohort: :november},
-#   {name: "Darth Vader", cohort: :november},
-#   {name: "Nurse Ratched", cohort: :november},
-#   {name: "Michael Corleone",cohort: :november},
-#   {name: "Alex DeLarge", cohort: :november},
-#   {name: "The Wicked Witch of the West", cohort: :november},
-#   {name: "Terminator", cohort: :november},
-#   {name: "Freddy Krueger", cohort: :november},
-#   {name: "The Joker", cohort: :november},
-#   {name: "Joffrey Baratheon", cohort: :november},
-#   {name: "Norman Bates", cohort: :november}
-# ]
 
+@students = [] #an empty array accessible to all methods
 
-def print_header(students)
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header()
+  print_students_list()
+  print_cohort(@students, :may)
+  print_footer()
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "9"
+    exit # this will cause the program to terminate
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def print_header()
   # exit if students.count == 0
   puts "The students of my cohort at Makers Academy"
   puts "--------------"
 end
 
-def print(students)
+def print_students_list()
   lineWidth = 15
-  students.each_with_index do |student, i|
+  @students.each_with_index do |student, i|
       puts  "#{i+1}. #{student[:name]}".ljust(lineWidth) +
             "(#{student[:cohort]} cohort) ".center(lineWidth) +
             "Hobby: #{student[:hobby]}".center(lineWidth*2)
@@ -44,9 +64,9 @@ def print_cohort(students, cohort)
   end
 end
 
-def print_footer(names)
+def print_footer()
   # exit if names.count == 0
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{@students.count} great students"
 end
 
 def checkmonth check
@@ -63,7 +83,7 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   # create an empty array
-  students = []
+  # students = []
     name =' '
     while !name.empty? do
     #get name from the user
@@ -75,17 +95,17 @@ def input_students
     cohort = ' '
     cohort = checkmonth(cohort)
     # add the student hash to the array
-    students << {name: name, cohort: cohort, hobby: hobby}
-    puts "Now we have #{students.count} students" if students.count > 1
-    puts "Now we have 1 student" if students.count == 1
+    @students << {name: name, cohort: cohort, hobby: hobby}
+    puts "Now we have #{@students.count} students" if @students.count > 1
+    puts "Now we have 1 student" if @students.count == 1
   end
   #return the array of students
-  students
+
 end
 #nothing happens until we call the methods
-students = input_students
-exit if students.count == 0
-print_header(students)
-print(students)
+interactive_menu
+exit if @students.count == 0
+print_header()
+print_students_list()
 print_cohort(students, :may)
-print_footer(students)
+print_footer()
