@@ -113,13 +113,14 @@ def student_data_input name, cohort, hobby
 end
 
 def save_students
-  file = File.open("students.csv", "w")
+  file = File.open(filename = "students.csv", "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:hobby]]
     csv_line = student_data.join(" , ")
     file.puts csv_line
   end
   file.close
+  puts "#{@students.count} Students saved to #{filename}"
 end
 
 def load_students(filename= "students.csv") #Here we give filename a default value, if the argument is not supplied students.csv is used
@@ -129,6 +130,7 @@ def load_students(filename= "students.csv") #Here we give filename a default val
     student_data_input name, cohort, hobby
     end
   file.close
+  puts "#{@students.count} students loaded from #{filename}"
 end
 
 def try_load_students
@@ -136,7 +138,7 @@ def try_load_students
   return if filename.nil? #get out of the method if it isn't given
   if File.exists?(filename) #if it exists..
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    #puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit # quit the program
