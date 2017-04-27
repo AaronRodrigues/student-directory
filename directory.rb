@@ -1,3 +1,4 @@
+require 'csv'
 
 @students = [] #an empty array accessible to all methods
 
@@ -115,13 +116,11 @@ end
 def save_students
   puts "Input the filename to save as : "
   filename = STDIN.gets.chomp
-    file = File.open(filename , "w")
+  CSV.open(filename , "w") do |file|        #replaced the File.open with CSV.open to refractor the code
   @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobby]]
-    csv_line = student_data.join(" , ")
-    file.puts csv_line
+    file << [student[:name], student[:cohort], student[:hobby]]
+    end
   end
-  file.close
   puts "#{@students.count} Students saved to #{filename}"
   puts
 end
@@ -131,16 +130,14 @@ def load_students(filename= "students.csv") #Here we give filename a default val
   filename = STDIN.gets.chomp
   return if filename.nil?
   if File.exists?(filename)
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
-      name, cohort, hobby = line.chomp.split(' , ')
+    CSV.foreach(filename) do |row|          #replaced File.open with CSV.foreach it eliminates an extra loop and makes the code more readable       
+      name, cohort, hobby = row
       student_data_input name, cohort, hobby
       end
   else
     puts "Sorry, #{filename} does not exist!"
     exit
   end
-  file.close
   puts "#{@students.count} students loaded from #{filename}"
 end
 
@@ -149,7 +146,6 @@ def try_load_students
   return if filename.nil? #get out of the method if it isn't given
   if File.exists?(filename) #if it exists..
     load_students(filename)
-    #puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit # quit the program
